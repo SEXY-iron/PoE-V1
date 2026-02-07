@@ -6,7 +6,9 @@ const grid = document.getElementById('grid');
 const resetBtn = document.getElementById('reset');
 const submitBtn = document.getElementById('submit');
 // FIX: was 'submit-btn' but the HTML has id="submit"
-const feedback = document.getElementById('feedback'); 
+const feedback = document.getElementById('feedback');
+const modalOverlay = document.getElementById('modal-overlay');
+const modalClose = document.getElementById('modal-close'); 
 
 
 // Track user's selected sequence
@@ -86,19 +88,32 @@ function selectCell(cell) {
        
    }
 
-   //submit and check sequence (V1 only - we'll add rules later)
+   // Check if the sequence follows Western reading order (left-to-right, top-to-bottom = ascending indices)
+   function isWesternOrder(sequence) {
+     for (let i = 1; i < sequence.length; i++) {
+       if (sequence[i] <= sequence[i - 1]) {
+         return false;
+       }
+     }
+     return true;
+   }
+
+   //submit and check sequence
    function submit() {
     if (selectedSequence.length === 0 ) {
     // FIX: was 'lenght' — typo, correct spelling is 'length'
-        feedback.textContent = 'Please select at least some cells to proceed'; 
-        feedback.style.background = '#ffebee'; 
-        return; 
-    
+        feedback.textContent = 'Please select at least some cells to proceed';
+        feedback.style.background = '#ffebee';
+        return;
+
    }
+
+    // Show the popup regardless of selection order
+    modalOverlay.classList.add('active');
 
     feedback.textContent = `You selected ${selectedSequence.length} cells in this order: ${selectedSequence.join(' - ')}`;
     // FIX: was using regular quotes '...' instead of backticks `...` — template literals need backticks to interpolate ${} expressions. Also had a stray backtick+quote at the end.
-    feedback.style.background = '#e3f2fd'; 
+    feedback.style.background = '#e3f2fd';
 
     console.log('Submitted sequence:', selectedSequence);
 }
@@ -115,7 +130,8 @@ function selectCell(cell) {
 
     //Event listners for buttons
     resetBtn.addEventListener('click', reset);
-    submitBtn.addEventListener('click', submit); 
+    submitBtn.addEventListener('click', submit);
+    modalClose.addEventListener('click', () => modalOverlay.classList.remove('active')); 
 
 
     // Create grid when the page loads

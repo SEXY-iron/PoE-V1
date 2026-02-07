@@ -6,7 +6,7 @@
 }
 
 body { 
-    font-family: Arial, Helvetica, sans-serif; 
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
     background-color: #c90808;
     display: flex; 
     /* arrange items in a container in horizontally or vertically
@@ -27,18 +27,9 @@ body {
 }
 
 h1 {
-     margin-bottom: 20px;
-     /* this adds space below the heading, seperating it from the heading */
-     color: #fff;
-     font-size: 48px;
-     text-shadow:
-       0 1px 0 #ccc,
-       0 2px 0 #bbb,
-       0 3px 0 #aaa,
-       0 4px 0 #999,
-       0 5px 0 #888,
-       0 6px 5px rgba(0, 0, 0, 0.4),
-       0 7px 10px rgba(0, 0, 0, 0.2);
+     margin-bottom: 20px; 
+     /* this adds space below the heading, seperating it from the heading */ 
+     color: #333; 
 
 }
 
@@ -54,7 +45,7 @@ h1 {
     }
 
     .cell {
-        background: rgb(137, 18, 18); 
+        background: rgb(14, 1, 1); 
         border: 2px solid #ccc; 
         cursor: pointer; 
         display: flex; 
