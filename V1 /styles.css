@@ -6,8 +6,8 @@
 }
 
 body { 
-    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
-    background-color: #c90808;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    background-color: black;
     display: flex; 
     /* arrange items in a container in horizontally or vertically
     allows <body> child elements be arranged using flexbox rules */
@@ -17,7 +17,7 @@ body {
 }
 
 .container {
-    background: rgb(32, 11, 196); 
+    background: rgb(0, 26, 255); 
     padding: 30px; 
     border-radius: 10px; 
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -45,7 +45,7 @@ h1 {
     }
 
     .cell {
-        background: rgb(14, 1, 1); 
+        background: rgb(0, 26, 255); 
         border: 2px solid #ccc; 
         cursor: pointer; 
         display: flex; 
@@ -92,9 +92,85 @@ h1 {
 
      button:hover {
         /* changes the styling of the cells when the user hovers over them with the mouse */
-        margin-top: 20px; 
-        padding: 15px; 
-        border-radius: 5px; 
-        min-height: 50px; 
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 5px;
+        min-height: 50px;
 
+     }
+
+     /* .modal-overlay = the full-screen dark backdrop behind the popup.
+        Hidden by default (display: none), positioned fixed so it stays in place over everything.
+        rgba(0,0,0,0.85) = black at 85% opacity so the page is still slightly visible behind it.
+        z-index: 100 = makes sure it sits on top of all other elements on the page. */
+     .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+     }
+
+     /* .modal-overlay.active = when JavaScript adds the 'active' class,
+        it switches from display: none to display: flex, making the overlay visible
+        and centering the modal box inside it using justify-content and align-items from above. */
+     .modal-overlay.active {
+        display: flex;
+     }
+
+     /* .modal = the actual popup box itself that sits inside the overlay.
+        Dark background (#1a1a1a) with white text, padded, rounded corners,
+        max-width stops it getting too wide on big screens.
+        line-height: 1.7 = spacing between lines of text for readability.
+        Red border matches the site's colour scheme. */
+     .modal {
+        background: #1a1a1a;
+        color: #fff;
+        padding: 40px;
+        border-radius: 10px;
+        max-width: 550px;
+        text-align: left;
+        line-height: 1.7;
+        border: 2px solid #c90808;
+     }
+
+     /* .modal-heading = styles the first line "You followed Western ordering."
+        Larger red text to make it stand out as a title/warning. */
+     .modal-heading {
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #c90808;
+     }
+
+     /* .modal p = targets all <p> paragraph elements inside the modal.
+        Adds spacing between each paragraph and transparent background
+        so the dark modal background shows through. */
+     .modal p {
+        margin-bottom: 15px;
+        background: transparent;
+     }
+
+     /* .modal-citation = styles the Mavhunga quote attribution at the bottom.
+        Italic, smaller, and grey (#aaa) to visually separate it from the main text. */
+     .modal-citation {
+        font-style: italic;
+        color: #aaa;
+        margin-top: 20px;
+        font-size: 14px;
+     }
+
+     /* .modal button = styles the Close button inside the modal.
+        Full width (display: block + width: 100%) with red background
+        to match the site theme. Inherits font-size, colour, border-radius from the main button rule above. */
+     .modal button {
+        margin-top: 20px;
+        background: #c90808;
+        display: block;
+        width: 100%;
      }
