@@ -1,0 +1,91 @@
+* {
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box;
+    background-color: black; 
+}
+
+body { 
+    font-family: Arial, Helvetica, sans-serif; 
+    background-color: #c90808;
+    display: flex; 
+    /* arrange items in a container in horizontally or vertically
+    allows <body> child elements be arranged using flexbox rules */
+    justify-content: center;
+    align-items: center; 
+    min-height: 100vh; 
+}
+
+.container {
+    background: rgb(32, 11, 196); 
+    padding: 30px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    /* adds a shadow effect to the container = gives it a eleveted (lifted) look */
+    text-align: center;
+
+}
+
+h1 {
+     margin-bottom: 20px; 
+     /* this adds space below the heading, seperating it from the heading */ 
+     color: #333; 
+
+}
+
+    .grid {
+        display: grid; 
+        grid-template-columns: repeat(4, 100px); 
+        grid-template-rows: repeat(6, 100px); 
+        gap: 10px;
+        margin: 20px auto; 
+        background: #eee; 
+        padding: 5px; 
+    
+    }
+
+    .cell {
+        background: rgb(137, 18, 18); 
+        border: 2px solid #ccc; 
+        cursor: pointer; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        transition: all 0.3s; 
+
+    }
+
+    .cell:hover { 
+        background: #2196f3; 
+      
+
+    }
+     .cell.selected {
+        background: #2196f3; 
+        border-color: #1976D2; 
+     }
+     .controls { 
+        margin-top: 20px; 
+     }
+      
+     button { 
+        padding: 10px 20px; 
+        margin: 0 10px; 
+        font-size: 16px; 
+        cursor: pointer;
+        border: none; 
+        border-radius: 5px; 
+        /* used to create rounded corners on the button */
+        background: #4CAF50; 
+        color: white; 
+
+     }
+
+     button:hover {
+        /* changes the styling of the cells when the user hovers over them with the mouse */
+        margin-top: 20px; 
+        padding: 15px; 
+        border-radius: 5px; 
+        min-height: 50px; 
+
+     }
