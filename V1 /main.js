@@ -10,12 +10,30 @@ const feedback = document.getElementById('feedback');
 
 
 // Track user's selected sequence
-  let selectedSequence = []; 
+  let selectedSequence = [];
+
+  // Image filenames — 8 symbols, each repeated 3 times = 24 cells
+  const images = [
+    'SYM.1.png', 'SYM.2.png', 'SYM.3.png', 'SYM.4 copy.png',
+    'SYM.5.png', 'SYM.6.png', 'SYM.7.png', 'SYM.8.png'
+  ];
+
+  // Shuffle an array randomly (Fisher-Yates shuffle)
+  function shuffle(array) {
+    for (let j = array.length - 1; j > 0; j--) {
+      const k = Math.floor(Math.random() * (j + 1));
+      [array[j], array[k]] = [array[k], array[j]];
+    }
+    return array;
+  }
 
   // Create the 4x6 grid (24 cells)
    function createGrid() {
-      // Loop to create 24 cells (4 columns x 6 rows) 
-      for (let i = 0; i < 24; i++) { 
+      // Each image appears 3 times, shuffled randomly each page load
+      const shuffledImages = shuffle([...images, ...images, ...images]);
+
+      // Loop to create 24 cells (4 columns x 6 rows)
+      for (let i = 0; i < 24; i++) {
       /* For loop creates 24 cells:
         1. starts at i = 0
         2. Runs while i < (less than) 24
@@ -25,6 +43,13 @@ const feedback = document.getElementById('feedback');
            // FIX: was document.getElement('div') which doesn't exist — createElement creates a new DOM element
            cell.className = 'cell';
            cell.dataset.index = i; // store index in data attribute for later use
+
+           // Add a randomised image thumbnail inside the cell
+           const img = document.createElement('img');
+           img.src = '../IMAGES/' + shuffledImages[i];
+           img.alt = 'Symbol ' + (i + 1);
+           cell.appendChild(img);
+
         // add click event listener to each cell
           cell.addEventListener('click', () => selectCell(cell, i));
 
