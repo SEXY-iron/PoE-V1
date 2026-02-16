@@ -1,4 +1,4 @@
-// Get elemts from HTML
+o// Get elemts from HTML
 const grid = document.getElementById('grid'); 
 /* const = constant = cannot be ressigned value can't be changed*/ 
 const resetBtn = document.getElementById('reset');

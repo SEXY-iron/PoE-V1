@@ -1,0 +1,245 @@
+/* ============================================================
+   V2 WORD SELECTION TEST — STYLES
+   Theme: Windows PC terminal / Blue Screen of Death / retro
+   ============================================================ */
+
+/* Universal reset — removes default margins/padding on all elements.
+   box-sizing: border-box = padding and borders included inside element width/height. */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* body — full page royal blue background (#0026ff).
+   Flexbox centres the container both horizontally and vertically.
+   VT323 font gives the retro terminal / Blue Screen of Death aesthetic. */
+body {
+    font-family: 'VT323', monospace;
+    background-color: #001fcb;
+    background-image: url('./IMAGES/background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* .container — the main content wrapper.
+   Blue background matches the body so it blends in seamlessly.
+   max-width stops it stretching too wide on large screens.
+   padding gives breathing room inside. */
+.container {
+    background: transparent;
+    padding: 40px;
+    text-align: center;
+    max-width: 800px;
+    width: 90%;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* .typewriter — the animated heading text at the top of the page.
+   White text, large font size for readability.
+   min-height stops the layout from jumping as text types in.
+   text-align left to match a terminal cursor feel. */
+.typewriter {
+    color: white;
+    font-size: 24px;
+    min-height: 40px;
+    margin-bottom: 30px;
+    text-align: left;
+    letter-spacing: 1px;
+}
+
+/* .image-container — large white-bordered box for the image placeholder.
+   7px solid white border with NO fill (transparent background).
+   User will place their illustration inside this box later.
+   min-height gives it visible size even when empty. */
+.image-container {
+    border: 7px solid white;
+    background: #0021dc;
+    min-height: 400px;
+    flex: 1;
+    margin: 0 auto 30px auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* If an image is placed inside the container, make it fill the space */
+.image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* .choices — holds the 4 word option cells in a horizontal row.
+   CSS Grid with 4 equal columns and a gap between each cell.
+   margin-bottom adds space before the buttons below. */
+.choices {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+/* .cell — each clickable word option cell.
+   Blue background matching the page, white text.
+   Padding gives space around the word text inside.
+   border: 3px solid transparent = reserves space for the selected border
+   so the layout doesn't shift when a cell is selected.
+   cursor: pointer = hand icon on hover to show it's clickable.
+   transition = smooth animation when border/background changes. */
+.cell {
+    background: #0026ff;
+    color: white;
+    font-size: 28px;
+    padding: 20px 10px;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+/* .cell:hover — light border on hover gives visual feedback
+   that the cell is interactive before clicking. */
+.cell:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* .cell.selected — when a cell is clicked/selected,
+   a solid white border highlights it to show the user's choice.
+   Only one cell can be selected at a time (handled by JS). */
+.cell.selected {
+    border: 3px solid white;
+}
+
+/* .controls — wrapper around the Reset and Submit buttons.
+   Flexbox centres the buttons horizontally with a gap between them. */
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+/* button — base styles for Reset and Submit buttons.
+   White outline (3px border), NO fill (transparent background).
+   White text in the terminal font to match the retro theme.
+   Padding gives clickable area, cursor: pointer shows it's interactive. */
+button {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    padding: 12px 40px;
+    background: #0021dc;
+    color: white;
+    border: 3px solid white;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: all 0.2s;
+}
+
+/* button:hover — inverts colours on hover: white fill with blue text.
+   Gives clear visual feedback that the button is about to be clicked. */
+button:hover {
+    background: white;
+    color: #0026ff;
+}
+
+/* ============================================================
+   MODAL OVERLAY STYLES
+   Same pattern as V1 — hidden by default, toggled via .active class
+   ============================================================ */
+
+/* .modal-overlay — full-screen dark backdrop behind the popup.
+   Hidden by default (display: none), fixed positioning covers the whole viewport.
+   rgba(0,0,0,0.85) = black at 85% opacity so the page is slightly visible behind.
+   z-index: 100 = sits on top of all other elements. */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+/* .modal-overlay.active — when JavaScript adds the 'active' class,
+   switches from display: none to display: flex, making the overlay visible
+   and centering the modal box using justify-content and align-items. */
+.modal-overlay.active {
+    display: flex;
+}
+
+/* .modal — the popup box inside the overlay.
+   Dark background with white text, padded, rounded corners.
+   max-width stops it getting too wide on big screens.
+   line-height: 1.7 = readable spacing between lines.
+   Red border matches the critique/warning theme. */
+.modal {
+    background: #1a1a1a;
+    color: #fff;
+    font-family: 'VT323', monospace;
+    padding: 40px;
+    border-radius: 10px;
+    max-width: 550px;
+    text-align: left;
+    line-height: 1.7;
+    border: 2px solid #c90808;
+}
+
+/* .modal-heading — the bold red title at the top of the modal.
+   Larger font and red colour make it stand out as a warning/statement. */
+.modal-heading {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #c90808;
+}
+
+/* .modal p — paragraph text inside the modal.
+   Spacing between paragraphs, transparent background
+   so the dark modal background shows through. */
+.modal p {
+    margin-bottom: 15px;
+    background: transparent;
+    font-size: 18px;
+}
+
+/* .modal-citation — the Mavhunga quote attribution.
+   Italic, smaller, grey text to visually separate it from the main message. */
+.modal-citation {
+    font-style: italic;
+    color: #aaa;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+/* .modal-close — the Close button inside the modal.
+   Full width, red background to match the border/warning theme. */
+.modal-close {
+    margin-top: 20px;
+    background: #c90808;
+    color: white;
+    display: block;
+    width: 100%;
+    border-color: #c90808;
+}
+
+/* .modal-close:hover — darker red on hover for feedback. */
+.modal-close:hover {
+    background: #a00606;
+    color: white;
+    border-color: #a00606;
+}

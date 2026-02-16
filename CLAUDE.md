@@ -4,27 +4,60 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a vanilla HTML/CSS/JavaScript web application — a grid-based interactive selection interface (V1 prototype). There are no build tools, package managers, or frameworks. It is a university fine art coursework project.
+University fine art coursework — an interactive word-selection test that critiques how Standard English is privileged over Bajan Creole / BBE expressions. Built as vanilla HTML/CSS/JavaScript with no build tools, frameworks, or dependencies. Retro terminal / Blue Screen of Death aesthetic using VT323 Google Font.
 
 ## Running the Project
 
-Open `V1/index.html` directly in a browser. There is no build step, dev server, or dependencies to install.
+Open `index.html` directly in a browser (or use VS Code Live Server). No build step, dev server, or package manager. Note: parent directory names contain trailing spaces (`UNIT9 /`) which require quoting in terminal commands.
 
 ## Architecture
 
-All source code lives in the `V1/` directory:
+All source files are at the root of `PoE-V1/`:
 
-- **index.html** — Entry point. Defines the DOM structure: a 4×6 grid container, Reset/Submit buttons, and a feedback div. Loads `main.js` only.
-- **styles.css** — CSS Grid layout (4 columns × 6 rows of 100px cells). Uses flexbox for page centering. Color scheme: red background, blue container, dark red cells that turn blue when selected.
-- **main.js** — Active application logic. Creates 24 grid cells dynamically, tracks user selections in a `selectedSequence` array, and validates submissions.
-- **script.js** — Older duplicate of main.js. **Not loaded by index.html.** Contains slightly different button IDs and extra console.logs. Can likely be removed.
+- **index.html** — Entry point. Typewriter heading, white-bordered image container, 4 word choice cells, Reset/Submit buttons, two modal overlays.
+- **main.js** — All application logic: participant ID prompt, typewriter animation, single-select cell interaction, validation, modal display, console data logging.
+- **styles.css** — Full page #0026ff blue, VT323 terminal font, 7px white border image box, word cell grid, 3px outline buttons, modal overlay styles.
+- **script.js** — Old V1 backup file. Not loaded by index.html.
+- **IMAGES/** — Symbol PNG files from V1. Image container in V2 is empty by default — add images manually.
 
-## Known Bugs in Current Code
+## Application Flow (main.js)
 
-The code has several errors that prevent it from running:
+1. **Page load** — Prompts user for Participant ID (stored for console logging). Starts typewriter animation.
+2. **Typewriter** — Types "PLEASE USE APPROPRIATE WORDS TO DESCRIBE THE IMAGE BELOW..." character by character. Clears and re-types every 1 minute.
+3. **Cell selection** — 4 word options: GIRL, GRL, GURL, GYAL. Only one can be selected at a time (single-select). Selected cell gets white border via `.selected` class.
+4. **Reset** — Clears selection, removes `.selected` from all cells.
+5. **Submit** — Does nothing if no option selected. If "GIRL" (Standard English): shows colonial critique modal. If "GRL"/"GURL"/"GYAL": shows incorrect feedback modal.
+6. **Console logging** — Each submission logs: Participant ID, selected word, whether it was Standard English (true/false), ISO timestamp.
 
-1. `document.getElement('div')` should be `document.createElement('div')` (main.js and script.js)
+## Key Implementation Details
+
+- Word options stored in `data-word` attributes on each `.cell` div.
+- Two separate modal overlays (`#correct-modal` and `#incorrect-modal`) toggled via `.active` class.
+- Modal close buttons use `.closest('.modal-overlay')` to find and hide their parent overlay.
+- VT323 font loaded via Google Fonts CDN link in HTML head.
+- Typewriter uses recursive `setTimeout` — `typeText(charIndex)` calls itself with `charIndex + 1`.
+
+## Git Branches
+
+- **Original branch** — V1 code (4x6 symbol grid with shuffled images).
+- **version2 branch** — V2 word-selection test (current working code).
+
+## Workflow Rules
+
+1. **Think through the problem** — Analyse the problem before generating any code.
+2. **Read the code base** — Review existing code to understand the context before making changes.
+3. **Write a plan** — Create a checklist of tasks in a `task.todo.md` file.
+4. **Manual verification** — Ask for approval before executing the plan.
+5. **Mark completed tasks** — Once tasks are done, mark them off in the checklist.
+6. **Add a review section** — At the end, include a summary of changes in the `task.todo.md` file.
+7. **Structured approach** — Break tasks down into smaller, manageable steps.
+
+## Original V1 Bugs (fixed on original branch)
+
+These were the bugs in the original V1 code before they were corrected:
+
+1. `document.getElement('div')` should be `document.createElement('div')`
 2. `selectedSequence.lenght` typo — should be `.length`
 3. `index` variable used without being defined — should be `cell.dataset.index`
 4. HTML uses `id="submit"` but main.js queries `id="submit-btn"` — ID mismatch
-5. No `reset()` function is defined despite being referenced by the Reset button
+5. No `reset()` function was defined despite being referenced by the Reset button

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Language As A Technology PoE_V1</title>
+
+        <!-- VT323 = retro terminal/pixelated font from Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+
+        <!-- Main page container — everything sits inside this blue box -->
+        <div class="container">
+
+            <!-- Typewriter animated heading at the top of the page -->
+            <div class="typewriter" id="typewriter"></div>
+
+            <!-- White-bordered image container — empty for now, user will add image later -->
+            <div class="image-container" id="image-container">
+                <img src="./IMAGES/SYM.8.png" alt="Symbol">
+            </div>
+
+            <!-- 4 word choice cells — user selects one to describe the image -->
+            <div class="choices" id="choices">
+                <div class="cell" data-word="GIRL">"GIRL"</div>
+                <div class="cell" data-word="GRL">"GRL"</div>
+                <div class="cell" data-word="GURL">"GURL"</div>
+                <div class="cell" data-word="GYAL">"GYAL"</div>
+            </div>
+
+            <!-- Reset and Submit buttons — white outline, no fill -->
+            <div class="controls">
+                <button id="reset">RESET</button>
+                <button id="submit">SUBMIT</button>
+            </div>
+
+        </div>
+
+        <!-- Modal overlay for "correct" answer (Standard English = GIRL) — colonial critique -->
+        <div id="correct-modal" class="modal-overlay">
+            <div class="modal">
+                <p class="modal-heading">You followed Western ordering.</p>
+                <p>You have been compromised and allowed the English language to define and misinterpret what these symbols mean.</p>
+                <p>This is how colonial frameworks impose meaning on Afro-Caribbean knowledge systems.</p>
+                <p class="modal-citation">— Clapperton Mavhunga, <em>"What Do Science, Technology, and Innovation Mean from Africa?"</em></p>
+                <button class="modal-close">Close</button>
+            </div>
+        </div>
+
+        <!-- Modal overlay for "incorrect" answer (Creole options: GRL, GURL, GYAL) -->
+        <div id="incorrect-modal" class="modal-overlay">
+            <div class="modal">
+                <p class="modal-heading">Incorrect.</p>
+                <p>The system expected Standard English.</p>
+                <p>But your answer reflects a culturally authentic expression. Your language is not wrong — the test is.</p>
+                <button class="modal-close">Close</button>
+            </div>
+        </div>
+
+        <script src="main.js"></script>
+    </body>
+</html>
