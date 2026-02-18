@@ -17,14 +17,15 @@
 body {
     font-family: 'VT323', monospace;
     background-color: #001fcb;
-    background-image: url('./IMAGES/background.png');
+    background-image: url('./IMAGES/2x/1@2x.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
 }
 
 /* .container — the main content wrapper.
@@ -33,11 +34,11 @@ body {
    padding gives breathing room inside. */
 .container {
     background: transparent;
-    padding: 40px;
+    padding: 20px 40px;
     text-align: center;
     max-width: 800px;
     width: 90%;
-    min-height: 90vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -51,9 +52,13 @@ body {
     color: white;
     font-size: 24px;
     min-height: 40px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     text-align: left;
     letter-spacing: 1px;
+    background: black;
+    display: inline-block;
+    padding: 6px 10px;
+    flex-shrink: 0;
 }
 
 /* .image-container — large white-bordered box for the image placeholder.
@@ -63,13 +68,59 @@ body {
 .image-container {
     border: 7px solid white;
     background: #0021dc;
-    min-height: 400px;
     flex: 1;
-    margin: 0 auto 30px auto;
+    min-height: 0;
+    margin: 0 auto 15px auto;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+}
+
+/* Screen shake animation — rapid horizontal jitter for wrong answer feedback */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+    20%, 40%, 60%, 80% { transform: translateX(8px); }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Error flash — centred "ERROR" text that fades out */
+.error-flash {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'VT323', monospace;
+    font-size: 80px;
+    color: #c90808;
+    background: black;
+    padding: 20px 60px;
+    border: 4px solid #c90808;
+    z-index: 200;
+    letter-spacing: 10px;
+    animation: fadeOut 1.2s ease-out forwards;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Floating animation — gentle bob up and down */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Floating class — reusable bob animation for popup boxes */
+.floating {
+    animation: float 3s ease-in-out infinite;
 }
 
 /* If an image is placed inside the container, make it fill the space */
@@ -77,7 +128,21 @@ body {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+    animation: float 3s ease-in-out infinite;
 }
+
+.center-text {
+    font-family: 'VT323', monospace;
+    font-size: 8vw;
+    color: #c90808;
+    text-align: center;
+    letter-spacing: 3px;
+    padding: 20px;
+    line-height: 1.1;
+    width: 100%;
+    overflow: hidden;
+}
+
 
 /* .choices — holds the 4 word option cells in a horizontal row.
    CSS Grid with 4 equal columns and a gap between each cell.
@@ -86,7 +151,8 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
+    flex-shrink: 0;
 }
 
 /* .cell — each clickable word option cell.
@@ -108,17 +174,24 @@ body {
     letter-spacing: 2px;
 }
 
+.cell img {
+    max-width: 100%;
+    max-height: 120px;
+    object-fit: contain;
+    animation: float 3s ease-in-out infinite;
+}
+
 /* .cell:hover — light border on hover gives visual feedback
    that the cell is interactive before clicking. */
 .cell:hover {
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 0, 0.5);
 }
 
 /* .cell.selected — when a cell is clicked/selected,
-   a solid white border highlights it to show the user's choice.
+   a solid yellow border highlights it to show the user's choice.
    Only one cell can be selected at a time (handled by JS). */
 .cell.selected {
-    border: 3px solid white;
+    border: 3px solid yellow;
 }
 
 /* .controls — wrapper around the Reset and Submit buttons.
@@ -127,7 +200,8 @@ body {
     display: flex;
     justify-content: center;
     gap: 20px;
-    margin-top: 10px;
+    margin-top: 5px;
+    flex-shrink: 0;
 }
 
 /* button — base styles for Reset and Submit buttons.
@@ -242,4 +316,590 @@ button:hover {
     background: #a00606;
     color: white;
     border-color: #a00606;
+}
+
+/* ============================================================
+   HOW TO PLAY — yellow instruction box on page load
+   ============================================================ */
+
+.how-to-play-box {
+    background: #FFD700;
+    color: #000;
+    font-family: 'VT323', monospace;
+    padding: 40px;
+    max-width: 550px;
+    text-align: center;
+    line-height: 1.8;
+    border: 2px solid #000;
+}
+
+.how-to-play-box h2 {
+    font-size: 30px;
+    margin-bottom: 25px;
+    letter-spacing: 3px;
+}
+
+.why-x {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #000;
+    line-height: 1;
+}
+
+.why-x:hover {
+    color: #c90808;
+}
+
+.how-to-play-box p {
+    font-size: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.how-to-play-box textarea {
+    width: 100%;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    padding: 12px;
+    border: 2px solid #000;
+    background: #fff;
+    color: #000;
+    resize: none;
+    letter-spacing: 1px;
+    outline: none;
+}
+
+.how-to-play-box textarea::placeholder {
+    color: #999;
+}
+
+.how-to-play-box button {
+    margin-top: 15px;
+    background: #000;
+    color: #FFD700;
+    border: 3px solid #000;
+    font-size: 22px;
+    padding: 12px 60px;
+    letter-spacing: 3px;
+}
+
+.how-to-play-box button:hover {
+    background: #FFD700;
+    color: #000;
+    border-color: #000;
+}
+
+/* ============================================================
+   CRITIQUE BOX — red popup with dynamic content
+   ============================================================ */
+
+.critique-box {
+    background: #FFD700;
+    color: #000;
+    font-family: 'VT323', monospace;
+    padding: 40px;
+    max-width: 550px;
+    text-align: left;
+    line-height: 1.7;
+    border: 3px solid #000;
+}
+
+.critique-heading {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.critique-box p {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.critique-box button {
+    margin-top: 20px;
+    background: #000;
+    color: #FFD700;
+    display: block;
+    width: 100%;
+    border: 3px solid #000;
+    font-size: 22px;
+    padding: 12px 40px;
+    font-family: 'VT323', monospace;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: all 0.2s;
+}
+
+.critique-box button:hover {
+    background: #FFD700;
+    color: #000;
+    border-color: #000;
+}
+
+
+
+/* ============================================================
+   TIMER BOX — top right square countdown
+   ============================================================ */
+
+.timer-box {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 100px;
+    height: 100px;
+    background: #00c853;
+    border: 5px solid #000;
+    font-family: 'VT323', monospace;
+    font-size: 50px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    transition: background 0.3s ease;
+}
+
+.timer-box.orange {
+    background: #ff9800;
+}
+
+.timer-box.red {
+    background: #c90808;
+}
+
+.timer-box.black {
+    background: #000;
+}
+
+.timer-box.hidden {
+    display: none;
+}
+
+/* ============================================================
+   GAME OVER — full black screen with red text
+   ============================================================ */
+
+#game-over {
+    background: #000;
+}
+
+.game-over-content {
+    text-align: center;
+    font-family: 'VT323', monospace;
+}
+
+.game-over-content h1 {
+    font-size: 10vw;
+    color: #c90808;
+    letter-spacing: 10px;
+    margin-bottom: 30px;
+}
+
+.game-over-content p {
+    font-size: 28px;
+    color: #c90808;
+    margin-bottom: 30px;
+    letter-spacing: 3px;
+}
+
+.game-over-content button {
+    background: #c90808;
+    color: #000;
+    border: 3px solid #c90808;
+    font-size: 28px;
+    padding: 15px 60px;
+    letter-spacing: 3px;
+}
+
+.game-over-content button:hover {
+    background: #000;
+    color: #c90808;
+    border-color: #c90808;
+}
+
+/* ============================================================
+   COMPLETION SURVEY — end of game feedback form
+   ============================================================ */
+
+.completion-box {
+    background: #FFD700;
+    color: #000;
+    font-family: 'VT323', monospace;
+    padding: 40px;
+    max-width: 600px;
+    width: 90%;
+    text-align: left;
+    line-height: 1.6;
+    border: 3px solid #000;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.completion-box h2 {
+    font-size: 26px;
+    text-align: center;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+}
+
+.completion-subtitle {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.completion-check {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    padding-left: 5px;
+}
+
+.completion-check input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.3);
+    cursor: pointer;
+    accent-color: #000;
+}
+
+.completion-check input[type="text"] {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    border: 2px solid #000;
+    background: #fff;
+    padding: 4px 8px;
+    width: 60%;
+    outline: none;
+}
+
+.completion-statement {
+    font-size: 18px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-style: italic;
+}
+
+.completion-citation {
+    font-size: 15px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.completion-box button {
+    margin-top: 20px;
+    background: #000;
+    color: #FFD700;
+    display: block;
+    width: 100%;
+    border: 3px solid #000;
+    font-size: 22px;
+    padding: 12px 40px;
+    font-family: 'VT323', monospace;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: all 0.2s;
+}
+
+.completion-box button:hover {
+    background: #FFD700;
+    color: #000;
+    border-color: #000;
+}
+
+/* ============================================================
+   PHASE 3 THEME — override colours when body has .phase-3 class
+   Edit these values to customise Phase 3 appearance
+   ============================================================ */
+
+.phase-3 .image-container {
+    border-color: white;
+    background: #000000;
+    transition: background 0.5s ease;
+}
+
+.phase-3 .cell {
+    background: #0026ff;
+    color: white;
+    border-color: transparent;
+}
+
+.phase-3 .cell:hover {
+    border-color: rgba(0, 0, 0, 0.836);
+}
+
+.phase-3 .cell.selected {
+    border-color: rgb(0, 60, 255);
+}
+
+.phase-3 button {
+    background:  #000000;
+    color: white;
+    border-color: white;
+}
+
+.phase-3 button:hover {
+    background: white;
+    color: #0026ff;
+}
+
+/* ============================================================
+   MOBILE RESPONSIVE
+   ============================================================ */
+
+/* Mobile phones */
+@media (max-width: 600px) {
+    .container {
+        padding: 8px 10px;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+    }
+
+    .typewriter {
+        font-size: 12px;
+        min-height: 20px;
+        margin-bottom: 6px;
+        padding: 3px 6px;
+    }
+
+    .image-container {
+        margin-bottom: 6px;
+        border-width: 4px;
+    }
+
+    .center-text {
+        font-size: 10vw;
+        padding: 10px;
+    }
+
+    .choices {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+
+    .cell {
+        font-size: 14px;
+        padding: 8px 4px;
+        letter-spacing: 1px;
+        border-width: 2px;
+    }
+
+    .cell img {
+        max-height: 60px;
+    }
+
+    .cell.selected {
+        border-width: 2px;
+    }
+
+    .controls {
+        gap: 8px;
+        margin-top: 2px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 6px 16px;
+    }
+
+    .error-flash {
+        font-size: 40px;
+        padding: 12px 25px;
+        letter-spacing: 5px;
+    }
+
+    .timer-box {
+        width: 50px;
+        height: 50px;
+        font-size: 26px;
+        top: 8px;
+        right: 8px;
+        border-width: 3px;
+    }
+
+    .game-over-content h1 {
+        font-size: 15vw;
+        letter-spacing: 5px;
+    }
+
+    .game-over-content p {
+        font-size: 20px;
+    }
+
+    .game-over-content button {
+        font-size: 20px;
+        padding: 10px 40px;
+    }
+
+    /* Modal popups — fit on small screens */
+    .how-to-play-box {
+        padding: 20px 15px;
+        max-width: 90%;
+    }
+
+    .how-to-play-box h2 {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+
+    .how-to-play-box p {
+        font-size: 15px;
+        margin-bottom: 12px;
+    }
+
+    .how-to-play-box textarea {
+        font-size: 15px;
+        padding: 8px;
+    }
+
+    .how-to-play-box button {
+        font-size: 18px;
+        padding: 8px 40px;
+    }
+
+    .critique-box {
+        padding: 20px 15px;
+        max-width: 90%;
+    }
+
+    .critique-heading {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .critique-box p {
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+
+    .critique-box button {
+        font-size: 18px;
+        padding: 8px 30px;
+    }
+
+    .completion-box {
+        padding: 20px 15px;
+        max-width: 95%;
+        max-height: 85vh;
+        max-height: 85dvh;
+    }
+
+    .completion-box h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .completion-subtitle {
+        font-size: 16px;
+    }
+
+    .completion-check {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .completion-check input[type="text"] {
+        font-size: 14px;
+        width: 50%;
+    }
+
+    .completion-statement {
+        font-size: 14px;
+    }
+
+    .completion-citation {
+        font-size: 12px;
+    }
+
+    .completion-box button {
+        font-size: 18px;
+        padding: 8px 30px;
+    }
+}
+
+/* Tablet */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .container {
+        padding: 15px 25px;
+        max-width: 700px;
+    }
+
+    .typewriter {
+        font-size: 20px;
+    }
+
+    .cell {
+        font-size: 22px;
+        padding: 15px 8px;
+    }
+
+    .cell img {
+        max-height: 90px;
+    }
+
+    .timer-box {
+        width: 80px;
+        height: 80px;
+        font-size: 40px;
+    }
+}
+
+/* Short screens (landscape phones) */
+@media (max-height: 500px) {
+    .container {
+        padding: 5px 10px;
+    }
+
+    .typewriter {
+        font-size: 12px;
+        min-height: 18px;
+        margin-bottom: 4px;
+        padding: 2px 6px;
+    }
+
+    .image-container {
+        margin-bottom: 4px;
+        border-width: 3px;
+    }
+
+    .choices {
+        gap: 4px;
+        margin-bottom: 4px;
+    }
+
+    .cell {
+        padding: 6px 4px;
+        font-size: 14px;
+    }
+
+    .cell img {
+        max-height: 50px;
+    }
+
+    .controls {
+        margin-top: 0;
+    }
+
+    button {
+        padding: 4px 14px;
+        font-size: 14px;
+    }
+
+    .timer-box {
+        width: 45px;
+        height: 45px;
+        font-size: 22px;
+        top: 5px;
+        right: 5px;
+    }
 }

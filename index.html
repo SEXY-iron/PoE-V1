@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Language As A Technology PoE_V1</title>
+        <title>LAAT LABS PoE</title>
 
         <!-- VT323 = retro terminal/pixelated font from Google Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,8 +14,48 @@
     </head>
     <body>
 
+        <!-- Timer box — top right of page -->
+        <div id="timer-box" class="timer-box">10</div>
+
+        <!-- Game Over overlay -->
+        <div id="game-over" class="modal-overlay">
+            <div class="game-over-content">
+                <h1>GAME OVER</h1>
+                <p>PRESS ENTER TO TRY AGAIN</p>
+                <button id="game-over-enter">ENTER</button>
+            </div>
+        </div>
+
+        <!-- Completion survey overlay — shown after Phase 3 -->
+        <div id="completion-modal" class="modal-overlay">
+            <div class="completion-box">
+                <h2>CONGRATULATIONS — YOU HAVE COMPLETED THE TEST</h2>
+                <p class="completion-subtitle">What have you experienced? (Select all that apply)</p>
+                <label class="completion-check"><input type="checkbox" value="assumptions"> I noticed my assumptions about "appropriate" language</label>
+                <label class="completion-check"><input type="checkbox" value="vernacular"> I learned about Afro-Caribbean vernacular expressions</label>
+                <label class="completion-check"><input type="checkbox" value="symbols"> I connected ancient symbols to contemporary language</label>
+                <label class="completion-check"><input type="checkbox" value="rules"> I experienced how rules can limit meaning</label>
+                <label class="completion-check"><input type="checkbox" value="freedom"> I felt the difference between constraint and freedom</label>
+                <label class="completion-check"><input type="checkbox" value="other"> Other: <input type="text" id="completion-other" placeholder="Type here..."></label>
+                <p class="completion-statement">This is decolonial knowledge creation in practice.</p>
+                <p class="completion-statement">Your responses contribute to research on Afro-Caribbean vernacular using Language As Technology.</p>
+                <p class="completion-statement">Thank you for participating.</p>
+                <p class="completion-citation">— Research conducted under Rhyan Jordan's Language As A Technology dissertation using Mavhunga's theory in "What Do Science, Technology, and Innovation Mean from Africa?" (2017)</p>
+                <button id="completion-submit">SUBMIT</button>
+            </div>
+        </div>
+
+        <!-- Restart popup — after completion survey -->
+        <div id="restart-modal" class="modal-overlay">
+            <div class="how-to-play-box floating">
+                <p>PRESS ENTER TO RESTART THE GAME</p>
+                <button id="restart-enter">ENTER</button>
+            </div>
+        </div>
+
         <!-- Main page container — everything sits inside this blue box -->
         <div class="container">
+
 
             <!-- Typewriter animated heading at the top of the page -->
             <div class="typewriter" id="typewriter"></div>
@@ -27,38 +67,67 @@
 
             <!-- 4 word choice cells — user selects one to describe the image -->
             <div class="choices" id="choices">
-                <div class="cell" data-word="GIRL">"GIRL"</div>
+                <div class="cell" data-word="WOMAN">"WOMAN"</div>
                 <div class="cell" data-word="GRL">"GRL"</div>
                 <div class="cell" data-word="GURL">"GURL"</div>
-                <div class="cell" data-word="GYAL">"GYAL"</div>
+                <div class="cell" data-word="BIG GYAL">"BIG GYAL"</div>
             </div>
 
             <!-- Reset and Submit buttons — white outline, no fill -->
-            <div class="controls">
+            <div class="controls" id="controls">
                 <button id="reset">RESET</button>
                 <button id="submit">SUBMIT</button>
             </div>
 
         </div>
 
-        <!-- Modal overlay for "correct" answer (Standard English = GIRL) — colonial critique -->
-        <div id="correct-modal" class="modal-overlay">
-            <div class="modal">
-                <p class="modal-heading">You followed Western ordering.</p>
-                <p>You have been compromised and allowed the English language to define and misinterpret what these symbols mean.</p>
-                <p>This is how colonial frameworks impose meaning on Afro-Caribbean knowledge systems.</p>
-                <p class="modal-citation">— Clapperton Mavhunga, <em>"What Do Science, Technology, and Innovation Mean from Africa?"</em></p>
-                <button class="modal-close">Close</button>
+        <!-- Transition popup — modal overlay between phases -->
+        <div id="transition-modal" class="modal-overlay">
+            <div class="how-to-play-box floating">
+                <p id="transition-text">PRESS ENTER TO CONTINUE</p>
+                <button id="transition-enter">ENTER</button>
             </div>
         </div>
 
-        <!-- Modal overlay for "incorrect" answer (Creole options: GRL, GURL, GYAL) -->
-        <div id="incorrect-modal" class="modal-overlay">
-            <div class="modal">
-                <p class="modal-heading">Incorrect.</p>
-                <p>The system expected Standard English.</p>
-                <p>But your answer reflects a culturally authentic expression. Your language is not wrong — the test is.</p>
-                <button class="modal-close">Close</button>
+        <!-- "Why?" popup — asks user to explain their choice (all phases) -->
+        <div id="why-modal" class="modal-overlay">
+            <div class="how-to-play-box" style="position: relative;">
+                <span id="why-close" class="why-x">&times;</span>
+                <h2>WHY?</h2>
+                <p id="why-question">WHY DID YOU CHOOSE THIS WORD?</p>
+                <textarea id="why-input" rows="4" placeholder="TYPE YOUR ANSWER HERE..."></textarea>
+                <button id="why-submit">SUBMIT</button>
+            </div>
+        </div>
+
+        <!-- Critique popup — red box, dynamic content based on user's choice + reasoning -->
+        <div id="critique-modal" class="modal-overlay">
+            <div class="critique-box">
+                <p class="critique-heading" id="critique-heading">YOU HAVE BEEN COMPROMISED!</p>
+                <div id="critique-body"></div>
+                <button id="critique-close">Close</button>
+            </div>
+        </div>
+
+        <!-- How to Play overlay — shown on page load -->
+        <div id="how-to-play" class="modal-overlay active">
+            <div class="how-to-play-box floating">
+                <h2>HOW TO PLAY</h2>
+                <p>SELECT THE <b>WORDS</b> YOU <b><u>PERSONALLY</u></b> WOULD USE TO DESCRIBE THE IMAGE DISPLAYED THEN PRESS "<b>SUBMIT</b>"</p>
+                <p>YOU HAVE <b>10 SECONDS</b> TO MAKE YOUR CHOICE BEFORE TIME RUNS OUT!</p>
+                <p>PRESS "<b>RESET</b>" IF YOU CHANGE YOUR MIND BEFORE SUBMITTING<span id="htp-dots"></span></p>
+                <button id="htp-close" class="modal-close">START</button>
+            </div>
+        </div>
+
+        <!-- Phase 3 How to Play overlay -->
+        <div id="how-to-play-p3" class="modal-overlay">
+            <div class="how-to-play-box floating">
+                <h2>HOW TO PLAY</h2>
+                <p>SELECT A <b>SYMBOL</b> — THE PROVERB WILL <b>STOP</b> ON THE ONE DISPLAYED. THEN PRESS "<b>SUBMIT</b>"</p>
+                <p>YOU HAVE <b>15 SECONDS</b> TO MAKE YOUR CHOICE BEFORE TIME RUNS OUT!</p>
+                <p>PRESS "<b>RESET</b>" TO CHANGE YOUR SYMBOL AND SEE A <b>DIFFERENT PROVERB</b><span id="htp-dots-p3"></span></p>
+                <button id="htp-close-p3">START</button>
             </div>
         </div>
 
