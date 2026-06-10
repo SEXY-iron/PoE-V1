@@ -362,6 +362,8 @@ button:hover {
 .why-choices {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-auto-flow: column;
     gap: 10px;
     margin: 15px 0;
 }
@@ -890,6 +892,7 @@ button:hover {
     .why-choices {
         gap: 6px;
         margin: 10px 0;
+        grid-auto-flow: column;
     }
 
     .why-cell {
