@@ -17,10 +17,11 @@
 body {
     font-family: 'VT323', monospace;
     background-color: #001fcb;
-    background-image: url('./IMAGES/2x/1@2x.png');
+    background-image: url('./IMAGES/bg.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-attachment: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
