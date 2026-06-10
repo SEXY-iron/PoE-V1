@@ -485,12 +485,7 @@ submitBtn.addEventListener('click', () => {
 
     const phase = phases[currentPhase];
 
-    // Update the why question text based on phase type
-    if (phase.symbols) {
-        whyQuestion.textContent = 'WHY DID YOU CHOOSE THIS SYMBOL?';
-    } else {
-        whyQuestion.textContent = 'WHY DID YOU CHOOSE THIS WORD?';
-    }
+    whyQuestion.textContent = 'LOOK IN THE MIRROR ON THE LEFT... AND SELECT AN OPTION';
 
     document.querySelectorAll('.why-cell').forEach(c => c.classList.remove('selected'));
     whyModal.classList.add('active');
