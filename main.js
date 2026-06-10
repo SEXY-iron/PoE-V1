@@ -272,18 +272,30 @@ const DOUBLE_PRESS_MS = 400;
 document.addEventListener('keydown', (e) => {
     if (isPaused || e.target.matches('input, textarea')) return;
 
-    // Key 2 = universal close/continue throughout the game
+    // Key 2 = advance/confirm (start, next phase, submit, restart)
     if (e.key === '2') {
-        const checks = [
-            ['how-to-play',       'htp-close'],
-            ['how-to-play-p3',    'htp-close-p3'],
-            ['transition-modal',  'transition-enter'],
-            ['game-over',         'game-over-enter'],
-            ['critique-modal',    'critique-close'],
-            ['restart-modal',     'restart-enter'],
-            ['completion-modal',  'completion-submit'],
+        const key2Checks = [
+            ['how-to-play',      'htp-close'],
+            ['how-to-play-p3',   'htp-close-p3'],
+            ['transition-modal', 'transition-enter'],
+            ['completion-modal', 'completion-submit'],
+            ['restart-modal',    'restart-enter'],
         ];
-        for (const [modalId, btnId] of checks) {
+        for (const [modalId, btnId] of key2Checks) {
+            if (document.getElementById(modalId).classList.contains('active')) {
+                document.getElementById(btnId).click();
+                return;
+            }
+        }
+    }
+
+    // Key 4 = close/dismiss (critique, game over)
+    if (e.key === '4') {
+        const key4Checks = [
+            ['critique-modal', 'critique-close'],
+            ['game-over',      'game-over-enter'],
+        ];
+        for (const [modalId, btnId] of key4Checks) {
             if (document.getElementById(modalId).classList.contains('active')) {
                 document.getElementById(btnId).click();
                 return;
