@@ -18,7 +18,7 @@
         <div id="game-over" class="modal-overlay">
             <div class="game-over-content">
                 <h1>GAME OVER</h1>
-                <p>PRESS ENTER TO TRY AGAIN</p>
+                <p>RESTARTING IN <span id="game-over-countdown">4</span>...</p>
                 <button id="game-over-enter">ENTER</button>
             </div>
         </div>
@@ -94,7 +94,12 @@
                 <span id="why-close" class="why-x">&times;</span>
                 <h2>WHY?</h2>
                 <p id="why-question">WHY DID YOU CHOOSE THIS WORD?</p>
-                <textarea id="why-input" rows="4" placeholder="TYPE YOUR ANSWER HERE..."></textarea>
+                <div class="why-choices" id="why-choices">
+                    <div class="why-cell" data-reason="BECAUSE IT WAS COOL">"BECAUSE IT WAS COOL"</div>
+                    <div class="why-cell" data-reason="BECAUSE I LOVE BLACK CULTURE">"BECAUSE I LOVE BLACK CULTURE"</div>
+                    <div class="why-cell" data-reason="I SAID WHAT I SAID">"I SAID WHAT I SAID"</div>
+                    <div class="why-cell" data-reason="I DON'T GIVE A SHIT">"I DON'T GIVE A SHIT"</div>
+                </div>
                 <button id="why-submit">SUBMIT</button>
             </div>
         </div>
@@ -130,6 +135,13 @@
             </div>
         </div>
 
+        <!-- Mute/unmute button -->
+        <button id="mute-btn" class="mute-btn">MUTE</button>
+
+        <!-- SoundCloud hidden player — autoplay on first interaction -->
+        <iframe id="sc-player" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/rhyanrhyanart/sets/laat-labs&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false" style="position:absolute;top:-9999px;left:-9999px;"></iframe>
+
+        <script src="https://w.soundcloud.com/player/api.js"></script>
         <script src="main.js"></script>
     </body>
 </html>

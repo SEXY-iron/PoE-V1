@@ -17,7 +17,6 @@ const critiqueBody = document.getElementById('critique-body');
 const critiqueCloseBtn = document.getElementById('critique-close');
 const whyModal = document.getElementById('why-modal');
 const whyQuestion = document.getElementById('why-question');
-const whyInput = document.getElementById('why-input');
 const whySubmitBtn = document.getElementById('why-submit');
 const whyCloseBtn = document.getElementById('why-close');
 
@@ -176,16 +175,146 @@ function triggerGameOver() {
     stopProverbCycle();
     clearTimeout(typewriterTimeout);
     gameOverModal.classList.add('active');
+
+    // Auto-restart countdown
+    let countdown = 4;
+    const countdownEl = document.getElementById('game-over-countdown');
+    countdownEl.textContent = countdown;
+    const countdownInterval = setInterval(() => {
+        countdown--;
+        countdownEl.textContent = countdown;
+        if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            restartFromGameOver();
+        }
+    }, 1000);
+
+    // If user clicks ENTER early, clear the auto countdown
+    gameOverEnterBtn.onclick = () => {
+        clearInterval(countdownInterval);
+        restartFromGameOver();
+    };
 }
 
-// Game Over → restart current phase
-gameOverEnterBtn.addEventListener('click', () => {
+function restartFromGameOver() {
     gameOverModal.classList.remove('active');
     loadPhase(currentPhase);
-    // For Phase 1 (initial load), show the Phase 1 HTP
-    // Phase 3 HTP is already triggered inside loadPhase
     if (currentPhase !== 2) {
         document.getElementById('how-to-play').classList.add('active');
+    }
+}
+
+
+// --- PAUSE ---
+let isPaused = false;
+let savedTimerColour = '';
+
+function togglePause() {
+    // Don't pause if a modal is open or game hasn't started
+    if (gameOverModal.classList.contains('active') ||
+        document.getElementById('how-to-play').classList.contains('active') ||
+        document.getElementById('how-to-play-p3').classList.contains('active') ||
+        whyModal.classList.contains('active') ||
+        critiqueModal.classList.contains('active') ||
+        transitionModal.classList.contains('active') ||
+        document.getElementById('completion-modal').classList.contains('active') ||
+        document.getElementById('restart-modal').classList.contains('active')) return;
+
+    if (!isPaused) {
+        isPaused = true;
+        stopTimer();
+        stopImageCycle();
+        stopProverbCycle();
+        clearTimeout(typewriterTimeout);
+        savedTimerColour = timerBox.className;
+        timerBox.textContent = '⏸';
+    } else {
+        isPaused = false;
+        timerBox.className = savedTimerColour;
+        timerBox.textContent = timerSeconds;
+        // Resume timer from where it left off
+        var duration = (currentPhase === 2) ? 20 : 10;
+        timerInterval = setInterval(() => {
+            timerSeconds--;
+            timerBox.textContent = timerSeconds;
+            if (timerSeconds <= 0) {
+                timerBox.className = 'timer-box black';
+                stopTimer();
+                triggerGameOver();
+            } else if (timerSeconds <= Math.ceil(duration * 0.25)) {
+                timerBox.className = 'timer-box red';
+            } else if (timerSeconds <= Math.ceil(duration * 0.5)) {
+                timerBox.className = 'timer-box orange';
+            }
+        }, 1000);
+        // Resume cycling
+        if (phases[currentPhase].images) startImageCycle();
+        if (phases[currentPhase].proverbs && !selectedWord) startProverbCycle();
+        restartTypewriter();
+    }
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && !e.target.matches('input, textarea')) {
+        e.preventDefault();
+        togglePause();
+    }
+});
+
+// --- SAMD21 CONTROLLER INPUT (pins A0-A3 → keys 1-4) ---
+let lastControllerKey = null;
+let lastControllerTime = 0;
+const DOUBLE_PRESS_MS = 400;
+
+document.addEventListener('keydown', (e) => {
+    if (isPaused || e.target.matches('input, textarea')) return;
+
+    const modalsOpen = ['game-over', 'critique-modal', 'transition-modal',
+        'completion-modal', 'restart-modal', 'how-to-play', 'how-to-play-p3']
+        .some(id => document.getElementById(id).classList.contains('active'));
+    if (modalsOpen) return;
+
+    const keyMap = { '1': 0, '2': 1, '3': 2, '4': 3 };
+    const index = keyMap[e.key];
+    if (index === undefined) return;
+
+    const now = Date.now();
+    const isDoublePress = (now - lastControllerTime) < DOUBLE_PRESS_MS;
+
+    // Why modal open — route to why cells
+    if (whyModal.classList.contains('active')) {
+        const whyCells = document.querySelectorAll('.why-cell');
+        if (index >= whyCells.length) return;
+        whyCells.forEach(c => c.classList.remove('selected'));
+        whyCells[index].classList.add('selected');
+        console.log('Why selected:', whyCells[index].dataset.reason);
+        if (isDoublePress) {
+            lastControllerKey = null;
+            lastControllerTime = 0;
+            whySubmitBtn.click();
+        } else {
+            lastControllerKey = e.key;
+            lastControllerTime = now;
+        }
+        return;
+    }
+
+    const cells = document.querySelectorAll('.cell');
+    if (index >= cells.length) return;
+
+    cells.forEach(c => c.classList.remove('selected'));
+    cells[index].classList.add('selected');
+    selectedWord = cells[index].dataset.word;
+    stopProverbCycle();
+    console.log('Controller selected:', selectedWord);
+
+    if (isDoublePress) {
+        lastControllerKey = null;
+        lastControllerTime = 0;
+        submitBtn.click();
+    } else {
+        lastControllerKey = e.key;
+        lastControllerTime = now;
     }
 });
 
@@ -297,6 +426,7 @@ attachCellListeners();
 
 // --- RESET BUTTON ---
 resetBtn.addEventListener('click', () => {
+    if (isPaused) return;
     document.querySelectorAll('.cell').forEach(c => c.classList.remove('selected'));
     selectedWord = null;
     if (phases[currentPhase].proverbs) startProverbCycle();
@@ -307,7 +437,7 @@ resetBtn.addEventListener('click', () => {
 // --- SUBMIT BUTTON ---
 // All phases: Submit → Why popup
 submitBtn.addEventListener('click', () => {
-    if (!selectedWord) return;
+    if (!selectedWord || isPaused) return;
     stopTimer();
     timerBox.classList.add('hidden');
 
@@ -320,17 +450,17 @@ submitBtn.addEventListener('click', () => {
         whyQuestion.textContent = 'WHY DID YOU CHOOSE THIS WORD?';
     }
 
-    whyInput.value = '';
+    document.querySelectorAll('.why-cell').forEach(c => c.classList.remove('selected'));
     whyModal.classList.add('active');
-    whyInput.focus();
 });
 
 
 // --- WHY POPUP SUBMIT ---
 // After user explains why → show critique popup
 whySubmitBtn.addEventListener('click', () => {
-    const reason = whyInput.value.trim();
-    if (!reason) return;
+    const selectedWhyCell = document.querySelector('.why-cell.selected');
+    if (!selectedWhyCell) return;
+    const reason = selectedWhyCell.dataset.reason;
 
     const phase = phases[currentPhase];
     const chosenWord = selectedWord;
@@ -401,6 +531,7 @@ whySubmitBtn.addEventListener('click', () => {
 
 // X button to close the why popup without submitting — resume timer
 whyCloseBtn.addEventListener('click', () => {
+    document.querySelectorAll('.why-cell').forEach(c => c.classList.remove('selected'));
     whyModal.classList.remove('active');
     timerBox.classList.remove('hidden');
     startTimer();
@@ -450,6 +581,7 @@ document.getElementById('htp-close').addEventListener('click', () => {
     clearInterval(dotsInterval);
     document.getElementById('how-to-play').classList.remove('active');
     startTimer();
+    startMusic();
 });
 
 
@@ -460,6 +592,7 @@ document.getElementById('htp-close-p3').addEventListener('click', () => {
     if (dotsIntervalP3) clearInterval(dotsIntervalP3);
     document.getElementById('how-to-play-p3').classList.remove('active');
     startTimer();
+    startMusic();
 });
 
 // Start dots animation when Phase 3 HTP is shown
@@ -517,4 +650,46 @@ document.getElementById('restart-enter').addEventListener('click', () => {
     imageContainer.innerHTML = '<img src="" alt="Symbol">';
     loadPhase(0);
     document.getElementById('how-to-play').classList.add('active');
+});
+
+
+// --- SOUNDCLOUD MUTE/UNMUTE ---
+var scWidget = null;
+var scReady = false;
+var isMuted = false;
+var musicStarted = false;
+var muteBtn = document.getElementById('mute-btn');
+
+try {
+    scWidget = SC.Widget(document.getElementById('sc-player'));
+    scWidget.bind(SC.Widget.Events.READY, function () {
+        scReady = true;
+        console.log('SoundCloud widget ready');
+    });
+} catch (e) {
+    console.log('SoundCloud widget init error:', e);
+}
+
+function startMusic() {
+    if (!musicStarted && scWidget && scReady) {
+        scWidget.play();
+        musicStarted = true;
+        console.log('Music started');
+    } else if (!musicStarted) {
+        // Widget not ready yet — retry in 1s
+        setTimeout(startMusic, 1000);
+    }
+}
+
+muteBtn.addEventListener('click', () => {
+    if (!scWidget) return;
+    if (isMuted) {
+        scWidget.setVolume(100);
+        muteBtn.textContent = 'MUTE';
+        isMuted = false;
+    } else {
+        scWidget.setVolume(0);
+        muteBtn.textContent = 'UNMUTE';
+        isMuted = true;
+    }
 });
