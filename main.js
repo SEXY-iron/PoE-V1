@@ -18,7 +18,7 @@ const critiqueCloseBtn = document.getElementById('critique-close');
 const whyModal = document.getElementById('why-modal');
 const whyQuestion = document.getElementById('why-question');
 const whySubmitBtn = document.getElementById('why-submit');
-const whyCloseBtn = document.getElementById('why-close');
+const whyCloseBtn = { addEventListener: () => {} }; // why-close removed from UI (controller-only)
 
 
 // Key symbols shown in each cell (keys 1–4 in order)
