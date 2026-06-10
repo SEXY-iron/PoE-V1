@@ -427,6 +427,13 @@ button:hover {
     mix-blend-mode: multiply;
 }
 
+.entry-svg {
+    max-width: 100%;
+    max-height: 220px;
+    display: block;
+    margin: 0 auto 20px;
+}
+
 .htp-continue-btn {
     display: flex;
     flex-direction: column;

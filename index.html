@@ -14,6 +14,17 @@
     </head>
     <body>
 
+        <!-- Entry screen — shown on load before how-to-play -->
+        <div id="entry-modal" class="modal-overlay active">
+            <div class="how-to-play-box floating">
+                <img src="./IMAGES/3D1.svg" alt="Enter" class="entry-svg">
+                <button id="entry-start" class="htp-continue-btn">
+                    <img src="./IMAGES/3.png" alt="Key 1" class="htp-btn-img">
+                    PRESS KEY 1
+                </button>
+            </div>
+        </div>
+
         <!-- Game Over overlay -->
         <div id="game-over" class="modal-overlay">
             <div class="game-over-content">
@@ -114,7 +125,7 @@
         </div>
 
         <!-- How to Play overlay — shown on page load -->
-        <div id="how-to-play" class="modal-overlay active">
+        <div id="how-to-play" class="modal-overlay">
             <div class="how-to-play-box floating">
                 <h2>HOW TO PLAY</h2>
                 <p>SELECT THE <b>WORDS</b> YOU <b><u>PERSONALLY</u></b> WOULD USE TO DESCRIBE THE IMAGE DISPLAYED THEN PRESS "<b>SUBMIT</b>"</p>

@@ -125,7 +125,6 @@ if (urlPhase && parseInt(urlPhase) > 1 && parseInt(urlPhase) <= phases.length) {
 // --- PARTICIPANT ID ---
 const codeNames = ['SOS','AAA','OI','OK','YO','BIG','VEX','RAH','OOH','WAH','ZAP','ACE','FLY','JAM','POP','WOW','BAM','GOT','YAH','OOF','NAH','BET','FAM','UNO','AYO','MAX','ZEN','LIT','DAP','GEE'];
 let participantId = codeNames[Math.floor(Math.random() * codeNames.length)] + '-' + Math.floor(Math.random() * 900 + 100);
-alert('YOUR PLAYER CODE: ' + participantId);
 console.log('Participant ID:', participantId);
 
 
@@ -272,6 +271,15 @@ const DOUBLE_PRESS_MS = 400;
 document.addEventListener('keydown', (e) => {
     if (isPaused || e.target.matches('input, textarea')) return;
 
+    // Key 1 = enter/start (entry screen)
+    if (e.key === '1') {
+        const entryModal = document.getElementById('entry-modal');
+        if (entryModal && entryModal.classList.contains('active')) {
+            document.getElementById('entry-start').click();
+            return;
+        }
+    }
+
     // Key 2 = advance/confirm (start, next phase, submit, restart)
     if (e.key === '2') {
         const key2Checks = [
@@ -303,7 +311,7 @@ document.addEventListener('keydown', (e) => {
         }
     }
 
-    const modalsOpen = ['game-over', 'critique-modal', 'transition-modal',
+    const modalsOpen = ['entry-modal', 'game-over', 'critique-modal', 'transition-modal',
         'completion-modal', 'restart-modal', 'how-to-play', 'how-to-play-p3']
         .some(id => document.getElementById(id).classList.contains('active'));
     if (modalsOpen) return;
@@ -604,6 +612,11 @@ transitionEnterBtn.addEventListener('click', () => {
 
 
 // --- HOW TO PLAY OVERLAY ---
+document.getElementById('entry-start').addEventListener('click', () => {
+    document.getElementById('entry-modal').classList.remove('active');
+    document.getElementById('how-to-play').classList.add('active');
+});
+
 const htpDots = document.getElementById('htp-dots');
 let dotCount = 0;
 const dotsInterval = setInterval(() => {
