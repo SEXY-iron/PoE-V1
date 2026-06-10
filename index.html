@@ -19,7 +19,7 @@
             <div class="game-over-content">
                 <h1>GAME OVER</h1>
                 <p>RESTARTING IN <span id="game-over-countdown">4</span>...</p>
-                <button id="game-over-enter">ENTER</button>
+                <button id="game-over-enter" class="key2-btn"><img src="./IMAGES/2.png" alt="Key 2" class="key2-btn-img">PRESS KEY 2</button>
             </div>
         </div>
 
@@ -38,15 +38,15 @@
                 <p class="completion-statement">Your responses contribute to research on Afro-Caribbean vernacular using Language As Technology.</p>
                 <p class="completion-statement">Thank you for participating.</p>
                 <p class="completion-citation">— Research conducted under Rhyan Jordan's Language As A Technology dissertation using Mavhunga's theory in "What Do Science, Technology, and Innovation Mean from Africa?" (2017)</p>
-                <button id="completion-submit">SUBMIT</button>
+                <button id="completion-submit" class="key2-btn"><img src="./IMAGES/2.png" alt="Key 2" class="key2-btn-img">PRESS KEY 2 TO SUBMIT</button>
             </div>
         </div>
 
         <!-- Restart popup — after completion survey -->
         <div id="restart-modal" class="modal-overlay">
             <div class="how-to-play-box floating">
-                <p>PRESS ENTER TO RESTART THE GAME</p>
-                <button id="restart-enter">ENTER</button>
+                <p>PRESS KEY 2 TO RESTART THE GAME</p>
+                <button id="restart-enter" class="htp-continue-btn"><img src="./IMAGES/2.png" alt="Key 2" class="htp-btn-img">PRESS KEY 2</button>
             </div>
         </div>
 
@@ -83,15 +83,14 @@
         <!-- Transition popup — modal overlay between phases -->
         <div id="transition-modal" class="modal-overlay">
             <div class="how-to-play-box floating">
-                <p id="transition-text">PRESS ENTER TO CONTINUE</p>
-                <button id="transition-enter">ENTER</button>
+                <p id="transition-text">PRESS KEY 2 TO CONTINUE</p>
+                <button id="transition-enter" class="htp-continue-btn"><img src="./IMAGES/2.png" alt="Key 2" class="htp-btn-img">PRESS KEY 2</button>
             </div>
         </div>
 
         <!-- "Why?" popup — asks user to explain their choice (all phases) -->
         <div id="why-modal" class="modal-overlay">
             <div class="how-to-play-box" style="position: relative;">
-                <span id="why-close" class="why-x">&times;</span>
                 <h2>WHY?</h2>
                 <p id="why-question">WHY DID YOU CHOOSE THIS WORD?</p>
                 <div class="why-choices" id="why-choices">
@@ -101,7 +100,7 @@
                     <div class="why-cell" data-reason="I DON'T GIVE A SHIT"><img src="./IMAGES/1.png" alt="Key 4" class="why-key-symbol">"I DON'T GIVE A SHIT"</div>
                 </div>
                 <p class="why-controller-hint"><b>DOUBLE PRESS</b> THE SYMBOL TO SUBMIT YOUR CHOICE</p>
-                <button id="why-submit">SUBMIT</button>
+                <button id="why-submit" class="htp-continue-btn"><img src="./IMAGES/2.png" alt="Key 2" class="htp-btn-img">DOUBLE PRESS TO SUBMIT</button>
             </div>
         </div>
 
@@ -110,7 +109,7 @@
             <div class="critique-box">
                 <p class="critique-heading" id="critique-heading">YOU HAVE BEEN COMPROMISED!</p>
                 <div id="critique-body"></div>
-                <button id="critique-close">Close</button>
+                <button id="critique-close" class="key2-btn"><img src="./IMAGES/2.png" alt="Key 2" class="key2-btn-img">PRESS KEY 2</button>
             </div>
         </div>
 

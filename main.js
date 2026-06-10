@@ -32,14 +32,14 @@ const phases = [
         correct: 'WOMAN',
         typewriter: 'PLEASE USE APPROPRIATE WORDS TO DESCRIBE THE IMAGE BELOW...',
         showTransition: true,
-        transitionText: 'PRESS ENTER TO CONTINUE'
+        transitionText: 'PRESS KEY 2 TO CONTINUE'
     },
     {
         images: ['./IMAGES/SYM.7.png', './IMAGES/WINDRUSH.jpg'],
         words: ['YUTES', 'MANDEM', 'A GROUP OF GENTLEMEN', 'BWOY'],
         correct: 'A GROUP OF GENTLEMEN',
         showTransition: true,
-        transitionText: 'PRESS ENTER TO MOVE ON TO THE NEXT STAGE',
+        transitionText: 'PRESS KEY 2 TO MOVE ON TO THE NEXT STAGE',
         typewriter: 'PLEASE USE APPROPRIATE WORDS TO DESCRIBE THE IMAGE BELOW...'
     },
     {
@@ -272,17 +272,22 @@ const DOUBLE_PRESS_MS = 400;
 document.addEventListener('keydown', (e) => {
     if (isPaused || e.target.matches('input, textarea')) return;
 
-    // Key 2 closes how-to-play modals (consistent close/continue action throughout)
+    // Key 2 = universal close/continue throughout the game
     if (e.key === '2') {
-        const htp = document.getElementById('how-to-play');
-        const htpP3 = document.getElementById('how-to-play-p3');
-        if (htp.classList.contains('active')) {
-            document.getElementById('htp-close').click();
-            return;
-        }
-        if (htpP3.classList.contains('active')) {
-            document.getElementById('htp-close-p3').click();
-            return;
+        const checks = [
+            ['how-to-play',       'htp-close'],
+            ['how-to-play-p3',    'htp-close-p3'],
+            ['transition-modal',  'transition-enter'],
+            ['game-over',         'game-over-enter'],
+            ['critique-modal',    'critique-close'],
+            ['restart-modal',     'restart-enter'],
+            ['completion-modal',  'completion-submit'],
+        ];
+        for (const [modalId, btnId] of checks) {
+            if (document.getElementById(modalId).classList.contains('active')) {
+                document.getElementById(btnId).click();
+                return;
+            }
         }
     }
 

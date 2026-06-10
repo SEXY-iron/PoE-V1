@@ -515,6 +515,24 @@ button:hover {
 
 
 
+/* key2-btn — used on game-over, critique, completion buttons */
+.key2-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-family: 'VT323', monospace;
+    letter-spacing: 2px;
+    transition: all 0.2s;
+}
+
+.key2-btn-img {
+    max-height: 45px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+}
+
 /* ============================================================
    MUTE BUTTON — bottom left corner
    ============================================================ */
