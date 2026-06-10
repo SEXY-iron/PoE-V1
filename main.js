@@ -21,6 +21,9 @@ const whySubmitBtn = document.getElementById('why-submit');
 const whyCloseBtn = document.getElementById('why-close');
 
 
+// Key symbols shown in each cell (keys 1–4 in order)
+const KEY_SYMBOLS = ['./IMAGES/3.png', './IMAGES/4.png', './IMAGES/2.png', './IMAGES/1.png'];
+
 // --- PHASE DATA ---
 const phases = [
     {
@@ -268,6 +271,20 @@ const DOUBLE_PRESS_MS = 400;
 
 document.addEventListener('keydown', (e) => {
     if (isPaused || e.target.matches('input, textarea')) return;
+
+    // Key 4 closes how-to-play modals (mapped to the upward-facing symbol)
+    if (e.key === '4') {
+        const htp = document.getElementById('how-to-play');
+        const htpP3 = document.getElementById('how-to-play-p3');
+        if (htp.classList.contains('active')) {
+            document.getElementById('htp-close').click();
+            return;
+        }
+        if (htpP3.classList.contains('active')) {
+            document.getElementById('htp-close-p3').click();
+            return;
+        }
+    }
 
     const modalsOpen = ['game-over', 'critique-modal', 'transition-modal',
         'completion-modal', 'restart-modal', 'how-to-play', 'how-to-play-p3']
