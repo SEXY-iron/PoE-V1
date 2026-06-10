@@ -272,8 +272,8 @@ const DOUBLE_PRESS_MS = 400;
 document.addEventListener('keydown', (e) => {
     if (isPaused || e.target.matches('input, textarea')) return;
 
-    // Key 4 closes how-to-play modals (mapped to the upward-facing symbol)
-    if (e.key === '4') {
+    // Key 2 closes how-to-play modals (consistent close/continue action throughout)
+    if (e.key === '2') {
         const htp = document.getElementById('how-to-play');
         const htpP3 = document.getElementById('how-to-play-p3');
         if (htp.classList.contains('active')) {
