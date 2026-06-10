@@ -311,6 +311,17 @@ document.addEventListener('keydown', (e) => {
         }
     }
 
+    // Completion modal — keys 1-4 toggle options
+    if (document.getElementById('completion-modal').classList.contains('active')) {
+        const keyMap4 = { '1': 0, '2': 1, '3': 2, '4': 3 };
+        const ci = keyMap4[e.key];
+        if (ci !== undefined) {
+            const cells = document.querySelectorAll('.completion-cell');
+            if (cells[ci]) cells[ci].classList.toggle('selected');
+        }
+        return;
+    }
+
     const modalsOpen = ['entry-modal', 'game-over', 'critique-modal', 'transition-modal',
         'completion-modal', 'restart-modal', 'how-to-play', 'how-to-play-p3']
         .some(id => document.getElementById(id).classList.contains('active'));
@@ -654,17 +665,14 @@ observer.observe(document.getElementById('how-to-play-p3'), { attributes: true }
 
 // --- COMPLETION SURVEY ---
 document.getElementById('completion-submit').addEventListener('click', () => {
-    const checks = document.querySelectorAll('.completion-check input[type="checkbox"]:checked');
     const selected = [];
-    checks.forEach(cb => selected.push(cb.value));
-    const otherText = document.getElementById('completion-other').value.trim();
+    document.querySelectorAll('.completion-cell.selected').forEach(c => selected.push(c.dataset.value));
 
     const surveyData = {
         timestamp: new Date().toISOString(),
         participantId: participantId,
         phase: 'survey',
         selected: selected.join(', '),
-        reason: otherText || '',
         correctAnswer: '',
         wasCorrect: ''
     };
