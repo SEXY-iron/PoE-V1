@@ -17,7 +17,7 @@ All source files are at the root of `PoE-V1/`:
 - **index.html** — Entry point. Typewriter heading, white-bordered image container, 4 word choice cells, Reset/Submit buttons, two modal overlays.
 - **main.js** — All application logic: participant ID prompt, typewriter animation, single-select cell interaction, validation, modal display, console data logging.
 - **styles.css** — Full page #0026ff blue, VT323 terminal font, 7px white border image box, word cell grid, 3px outline buttons, modal overlay styles.
-- **script.js** — Old V1 backup file. Not loaded by index.html.
+
 - **IMAGES/** — Symbol PNG files from V1. Image container in V2 is empty by default — add images manually.
 
 ## Application Flow (main.js)

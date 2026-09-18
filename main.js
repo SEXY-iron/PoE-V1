@@ -264,10 +264,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 // --- SAMD21 CONTROLLER INPUT (pins A0-A3 → keys 1-4) ---
-let lastControllerKey = null;
-let lastControllerTime = 0;
-const DOUBLE_PRESS_MS = 400;
-
+4
 document.addEventListener('keydown', (e) => {
     if (isPaused || e.target.matches('input, textarea')) return;
 
