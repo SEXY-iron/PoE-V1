@@ -264,7 +264,10 @@ document.addEventListener('keydown', (e) => {
 });
 
 // --- SAMD21 CONTROLLER INPUT (pins A0-A3 → keys 1-4) ---
-4
+let lastControllerKey = null;
+let lastControllerTime = 0;
+const DOUBLE_PRESS_MS = 400;
+
 document.addEventListener('keydown', (e) => {
     if (isPaused || e.target.matches('input, textarea')) return;
 
@@ -472,7 +475,19 @@ function attachCellListeners() {
 
 // Attach listeners to the initial Phase 1 cells
 attachCellListeners();
+document.querySelectorAll('.why-cell').forEach(cell => {
+    cell.addEventListener('click', () => {
+        document.querySelectorAll('.why-cell').forEach(c => c.classList.remove('selected'));
+        cell.classList.add('selected');
+        console.log('Why selected:', cell.dataset.reason);
+    });
+});
 
+document.querySelectorAll('.completion-cell').forEach(cell => {
+    cell.addEventListener('click', () => {
+        cell.classList.toggle('selected');
+    });
+});
 
 // --- RESET BUTTON ---
 resetBtn.addEventListener('click', () => {
