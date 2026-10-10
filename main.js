@@ -455,7 +455,7 @@ function loadPhase(phaseIndex) {
     // Reset timer display (timer starts when HTP closes)
     stopTimer();
     timerSeconds = 20;
-    timerBox.textContent = (phaseIndex === 2) ? '15' : '10';
+    timerBox.textContent = (phaseIndex === 2) ? '15' : '10';``
     timerBox.className = 'timer-box';
 }
 
